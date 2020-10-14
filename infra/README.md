@@ -1,7 +1,7 @@
 Assuming there's no infrastructure when you start
 
 ```
-%> terraform apply
+$> terraform apply
 $> ssh server.war.logic-refinery.io 'sudo bash -s' -- < ./scripts/enable-legacy-iptables.sh
 $> ssh agent1.war.logic-refinery.io 'sudo bash -s' -- < ./scripts/enable-legacy-iptables.sh
 $> ssh server.war.logic-refinery.io 'sudo bash -s' -- < ./scripts/install-server.sh
