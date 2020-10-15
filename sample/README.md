@@ -1,6 +1,6 @@
+# Sample App
 
-
-
+This just gives me a deployment that I can target with the alb
 
 ```
 kubectl apply -f Deployment.yaml
