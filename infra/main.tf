@@ -10,6 +10,31 @@ resource "aws_route53_record" "war-ns" {
   records = aws_route53_zone.war.name_servers
 }
 
+resource "aws_security_group" "allow_kubectl" {
+  name        = "allow_kubectl"
+  description = "allow inbound kubectl to connect"
+
+  ingress {
+    description = "allow internal access"
+    from_port   = 6443
+    to_port     = 6443
+    protocol    = "tcp"
+    cidr_blocks = ["207.191.158.151/32"]
+  }
+
+  ingress {
+    description = "allow access from bloomington"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["207.191.158.151/32"]
+  }
+
+  tags = {
+    Name = "allow_kubectl"
+  }
+}
+
 resource "aws_instance" "server" {
   ami               = "ami-08f6e7446faea65e0"
   instance_type     = "t3a.small"
@@ -21,7 +46,7 @@ resource "aws_instance" "server" {
 
   key_name = "logic-refinery"
 
-  security_groups = ["default", "allow_ssh"]
+  security_groups = ["default", "allow_ssh", "allow_kubectl"]
 }
 
 resource "aws_route53_record" "server" {
