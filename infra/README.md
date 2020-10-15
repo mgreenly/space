@@ -1,6 +1,11 @@
-# spin up k3s cluster
+# Infrastructure
 
-Assuming there's no infrastructure when you start
+This will spin up a simple kubernetes cluster. This will be sufficient for the
+early stages of development allowing us develop processes here which
+should mostly still apply when we migrate to a more sophisticated cluster
+down the road.
+
+This assumes there's no existing infrastructure.
 
 ```
 # build the infrastructure
