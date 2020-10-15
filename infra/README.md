@@ -1,7 +1,7 @@
 # Infrastructure
 
 This will spin up a simple kubernetes cluster. This will be sufficient for the
-early stages of development allowing us develop processes here which
+early stages of development allowing me to develop processes here which
 should mostly still apply when we migrate to a more sophisticated cluster
 down the road.
 
