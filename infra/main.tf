@@ -1,3 +1,7 @@
+#
+# create subdomain
+#
+
 resource "aws_route53_zone" "war" {
   name = "war.logic-refinery.io"
 }
@@ -9,6 +13,35 @@ resource "aws_route53_record" "war-ns" {
   ttl     = "60"
   records = aws_route53_zone.war.name_servers
 }
+
+#
+# create acm certs
+#
+
+resource "aws_acm_certificate" "default" {
+  domain_name               = "war.logic-refinery.io"
+  subject_alternative_names = ["*.war.logic-refinery.io"]
+  validation_method = "DNS"
+}
+
+resource "aws_route53_record" "validation" {
+  zone_id  = aws_route53_zone.war.zone_id
+  name     = aws_acm_certificate.default.domain_validation_options.*.resource_record_name[0]
+  type     = aws_acm_certificate.default.domain_validation_options.*.resource_record_type[0]
+  records  = [aws_acm_certificate.default.domain_validation_options.*.resource_record_value[0]]
+  ttl      = "60"
+}
+
+resource "aws_acm_certificate_validation" "default" {
+  certificate_arn = aws_acm_certificate.default.arn
+  validation_record_fqdns = [
+    aws_route53_record.validation.fqdn,
+  ]
+}
+
+#
+#
+#
 
 resource "aws_security_group" "allow_kubectl" {
   name        = "allow_kubectl"
