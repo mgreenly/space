@@ -23,7 +23,7 @@ $> ssh server.war.logic-refinery.io 'sudo bash -s' -- < ./scripts/install-server
 # download it's token and config
 $> mkdir -p .secrets
 $> ssh server.war.logic-refinery.io sudo cat /var/lib/rancher/k3s/server/node-token > .secrets/server-token
-$> ./scripts/fetch-config
+$> ./scripts/fetch-config.sh
 
 # configure the agent
 $> ssh agent1.war.logic-refinery.io "sudo K3S_URL=https://$(terraform output -json war | jq --raw-output .server.private_ip):6443 K3S_TOKEN=$(cat .secrets/server-token) bash -s" -- < ./scripts/install-agent.sh

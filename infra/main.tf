@@ -15,19 +15,11 @@ resource "aws_security_group" "allow_kubectl" {
   description = "allow inbound kubectl to connect"
 
   ingress {
-    description = "allow internal access"
+    description = "allow kubectl access"
     from_port   = 6443
     to_port     = 6443
     protocol    = "tcp"
-    cidr_blocks = ["207.191.158.151/32"]
-  }
-
-  ingress {
-    description = "allow access from bloomington"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["207.191.158.151/32"]
+    cidr_blocks = ["207.191.158.151/32", "208.118.151.85/32"]
   }
 
   tags = {
@@ -44,7 +36,7 @@ resource "aws_instance" "server" {
     Name = "server"
   }
 
-  key_name = "logic-refinery"
+  key_name = "old-logic-refinery"
 
   security_groups = ["default", "allow_ssh", "allow_kubectl"]
 }
@@ -74,7 +66,7 @@ resource "aws_instance" "agent1" {
     Name = "agent1"
   }
 
-  key_name = "logic-refinery"
+  key_name = "old-logic-refinery"
 
   security_groups = ["default", "allow_ssh"]
 }
