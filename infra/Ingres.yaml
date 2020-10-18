@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: minimal-ingress
+  annotations:
+    traefik.frontend.rule.type: PathPrefixStrip
+spec:
+  rules:
+  - host: war.logic-refinery.io
+    http:
+      paths:
+        - path: /api
+          backend:
+            serviceName: api-service
+            servicePort: 8080
+  backend:
+    serviceName: static-service
+    servicePort: 8080
