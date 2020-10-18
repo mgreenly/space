@@ -1,38 +1,5 @@
 #
-# import data from the default vpc
-#
-data "aws_vpc" "default" {
-  tags = {
-    Name   = "default"
-  }
-}
-
-data "aws_security_group" "default" {
-  tags = {
-    Name   = "default"
-  }
-}
-
-# TODO: change to data
-resource "aws_default_subnet" "az_a" {
-  availability_zone = "us-east-2a"
-
-  tags = {
-    Name = "Default subnet for us-east-2a"
-  }
-}
-
-# TODO: change to data
-resource "aws_default_subnet" "az_b" {
-  availability_zone = "us-east-2b"
-
-  tags = {
-    Name = "Default subnet for us-east-2b"
-  }
-}
-
-#
-# create subdomain
+# create the subdomain
 #
 resource "aws_route53_zone" "war" {
   name = "war.logic-refinery.io"
@@ -46,6 +13,34 @@ resource "aws_route53_record" "war-ns" {
   records = aws_route53_zone.war.name_servers
 }
 
+#
+# create acm cert
+#
+resource "aws_acm_certificate" "default" {
+  domain_name               = "war.logic-refinery.io"
+  subject_alternative_names = ["*.war.logic-refinery.io"]
+  validation_method = "DNS"
+}
+
+resource "aws_route53_record" "validation" {
+  zone_id  = aws_route53_zone.war.zone_id
+  name     = aws_acm_certificate.default.domain_validation_options.*.resource_record_name[0]
+  type     = aws_acm_certificate.default.domain_validation_options.*.resource_record_type[0]
+  records  = [aws_acm_certificate.default.domain_validation_options.*.resource_record_value[0]]
+  ttl      = "60"
+}
+
+resource "aws_acm_certificate_validation" "default" {
+  certificate_arn = aws_acm_certificate.default.arn
+  validation_record_fqdns = [
+    aws_route53_record.validation.fqdn,
+  ]
+}
+
+
+#
+# create security groups
+#
 
 resource "aws_security_group" "war_instance" {
   name        = "war_instance"
@@ -188,31 +183,10 @@ resource "aws_security_group" "war_alb" {
   }
 }
 
+
 #
-# create acm certs
+# Create instances
 #
-
-resource "aws_acm_certificate" "default" {
-  domain_name               = "war.logic-refinery.io"
-  subject_alternative_names = ["*.war.logic-refinery.io"]
-  validation_method = "DNS"
-}
-
-resource "aws_route53_record" "validation" {
-  zone_id  = aws_route53_zone.war.zone_id
-  name     = aws_acm_certificate.default.domain_validation_options.*.resource_record_name[0]
-  type     = aws_acm_certificate.default.domain_validation_options.*.resource_record_type[0]
-  records  = [aws_acm_certificate.default.domain_validation_options.*.resource_record_value[0]]
-  ttl      = "60"
-}
-
-resource "aws_acm_certificate_validation" "default" {
-  certificate_arn = aws_acm_certificate.default.arn
-  validation_record_fqdns = [
-    aws_route53_record.validation.fqdn,
-  ]
-}
-
 resource "aws_instance" "server" {
   ami               = "ami-08f6e7446faea65e0"
   instance_type     = "t3a.small"
@@ -339,26 +313,3 @@ resource "aws_route53_record" "default" {
     evaluate_target_health    = true
   }
 }
-
-# resource "aws_route53_record" "foo" {
-#   zone_id = aws_route53_zone.war.zone_id
-#   name    = "foo.war.logic-refinery.io"
-#   type    = "A"
-#   alias {
-#     name                      = "dualstack.${aws_alb.war.dns_name}"
-#     zone_id                   = aws_alb.war.zone_id
-#     evaluate_target_health    = true
-#   }
-# }
-# 
-# resource "aws_route53_record" "bar" {
-#   zone_id = aws_route53_zone.war.zone_id
-#   name    = "bar.war.logic-refinery.io"
-#   type    = "A"
-#   alias {
-#     name                      = "dualstack.${aws_alb.war.dns_name}"
-#     zone_id                   = aws_alb.war.zone_id
-#     evaluate_target_health    = true
-#   }
-# }
-
