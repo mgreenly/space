@@ -98,6 +98,8 @@
 #     - path---
 #
 
+version: 0.2
+
 run-as: admin-user-name
 env:
   shell: /bin/bash
@@ -107,8 +109,6 @@ env:
 
 phases:
   build:
-    run-as: Linux-user-name
+    run-as: admin
     commands:
       - uname -a
-    finally:
-      - echo 'good bye'
