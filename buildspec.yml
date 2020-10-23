@@ -100,7 +100,7 @@
 
 version: 0.2
 
-run-as: admin-user-name
+# run-as: root
 env:
   shell: /bin/bash
   variables:
@@ -109,6 +109,5 @@ env:
 
 phases:
   build:
-    run-as: admin
     commands:
       - uname -a
