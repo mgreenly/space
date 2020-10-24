@@ -32,7 +32,9 @@ docker build \
   -t $IMAGE_NAME:latest \
   .
 
-echo $(aws ecr get-login-password --region us-east-2) | docker login -u AWS --password-stdin 900253156012.dkr.ecr.us-east-2.amazonaws.com/codebuild_haskell
+echo $(aws ecr --profile logic-refinery get-login-password --region us-east-2)
+
+echo $(aws ecr --profile logic-refinery get-login-password --region us-east-2) | docker login -u AWS --password-stdin 900253156012.dkr.ecr.us-east-2.amazonaws.com/codebuild_haskell
 
 docker push $IMAGE_NAME:latest
 
