@@ -19,6 +19,8 @@ phases:
       - echo $CABAL_VER
       - echo $IMAGE_NAME
       - cd codebuild/haskell
+      - pwd
+      - cat build.sh
       - ./build.sh
       #- >
       #  docker build \
