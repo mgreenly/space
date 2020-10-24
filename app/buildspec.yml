@@ -13,5 +13,8 @@ env:
 phases:
   build:
     commands:
-      - cd codebuild/haskell
+      - cd app
+      - pwd
+      - env
+      - which bash
       - ./build.sh
