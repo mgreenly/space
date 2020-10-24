@@ -19,9 +19,11 @@ phases:
       - echo $CABAL_VER
       - echo $IMAGE_NAME
       - pwd
-      - env
+      - cd codebuild/haskell
+      - pwd
+      # - env
 
-      - $(cd codebuild/haskell && ./codebuild.sh)
+      # - $(cd codebuild/haskell && ./codebuild.sh)
         #      - >
         #        docker build \
         #          --build-arg FROM_IMAGE=$FROM_IMAGE \
