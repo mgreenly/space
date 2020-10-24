@@ -18,17 +18,13 @@ phases:
       - echo $GHC_VER
       - echo $CABAL_VER
       - echo $IMAGE_NAME
-      - pwd
       - cd codebuild/haskell
-      - pwd
-      # - env
-
-      # - $(cd codebuild/haskell && ./codebuild.sh)
-        #      - >
-        #        docker build \
-        #          --build-arg FROM_IMAGE=$FROM_IMAGE \
-        #          --build-arg FROM_TAG=$FROM_TAG \
-        #          --build-arg GHC_VER=$GHC_VER \
-        #          --build-arg CABAL_VER=$CABAL_VER \
-        #          -t mgreenly/$IMAGE_NAME:latest \
-        #          .
+      - ./build.sh
+      #- >
+      #  docker build \
+      #    --build-arg FROM_IMAGE=$FROM_IMAGE \
+      #    --build-arg FROM_TAG=$FROM_TAG \
+      #    --build-arg GHC_VER=$GHC_VER \
+      #    --build-arg CABAL_VER=$CABAL_VER \
+      #    -t mgreenly/$IMAGE_NAME:latest \
+      #    .
