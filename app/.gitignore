@@ -1,0 +1,3 @@
+.debian-cabal/**/*
+dist-newstyle/**/*
+files
