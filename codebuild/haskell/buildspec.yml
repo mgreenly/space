@@ -13,20 +13,6 @@ env:
 phases:
   build:
     commands:
-      - echo $FROM_IMAGE
-      - echo $FROM_TAG
-      - echo $GHC_VER
-      - echo $CABAL_VER
-      - echo $IMAGE_NAME
       - cd codebuild/haskell
-      - pwd
-      - cat build.sh
-      - ./build.sh
-      #- >
-      #  docker build \
-      #    --build-arg FROM_IMAGE=$FROM_IMAGE \
-      #    --build-arg FROM_TAG=$FROM_TAG \
-      #    --build-arg GHC_VER=$GHC_VER \
-      #    --build-arg CABAL_VER=$CABAL_VER \
-      #    -t mgreenly/$IMAGE_NAME:latest \
-      #    .
+      - docker info
+      # - ./build.sh
