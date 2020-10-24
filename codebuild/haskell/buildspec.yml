@@ -1,8 +1,8 @@
 version: 0.2
 
+#  shell: /bin/bash
 # run-as: root
 env:
-  shell: /bin/bash
   variables:
     foo: bar
 
