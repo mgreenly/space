@@ -18,7 +18,10 @@ phases:
       - echo $GHC_VER
       - echo $CABAL_VER
       - echo $IMAGE_NAME
-      - ./build.sh
+      - pwd
+      - env
+
+      - $(cd codebuild/haskell && ./codebuild.sh)
         #      - >
         #        docker build \
         #          --build-arg FROM_IMAGE=$FROM_IMAGE \
