@@ -3,11 +3,12 @@
 #
 # Automation to build and upload this docker image. 
 #
-IMAGE_NAME="haskell"
 FROM_IMAGE="debian"
 FROM_TAG="10-slim"
 GHC_VER="8.8.4"
 CABAL_VER="3.2.0.0"
+
+IMAGE_NAME="900253156012.dkr.ecr.us-east-2.amazonaws.com/codebuild_haskell"
 
 ##
 ## make sure the base is current
@@ -28,10 +29,13 @@ CABAL_VER="3.2.0.0"
 docker build \
   --build-arg GHC_VER=$GHC_VER \
   --build-arg CABAL_VER=$CABAL_VER \
-  -t mgreenly/$IMAGE_NAME:latest \
+  -t $IMAGE_NAME:latest \
   .
 
-exit
+docker push $IMAGE_NAME:latest
+
+
+# exit
 
 ## generate build specific tag and add that tag to the latest build
 #newtag="$GHC_VER" #-$(date +'%Y%m%d%H%M%S')"
