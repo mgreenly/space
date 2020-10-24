@@ -29,3 +29,7 @@ data "aws_subnet" "c" {
   availability_zone = "us-east-2c"
 }
 
+
+data "aws_iam_user" "mgreenly" {
+  user_name = "michael.greenly"
+}

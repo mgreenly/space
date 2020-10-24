@@ -313,3 +313,13 @@ resource "aws_route53_record" "default" {
     evaluate_target_health    = true
   }
 }
+
+resource "aws_codecommit_repository" "test" {
+  repository_name = "war"
+  description     = "The war ci/cd repo"
+}
+
+resource "aws_ecr_repository" "war_builder" {
+  name = "war-builder"
+}
+

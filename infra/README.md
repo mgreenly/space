@@ -35,4 +35,9 @@ This assumes there's no existing infrastructure.
 
 # make kubectl use this config
    $> export KUBECONFIG=$(pwd)/.secrets/k3s.yaml
+
+
+# login docker
+  $> echo $(aws --profile logic-refinery ecr get-login-password --region us-east-2) | docker login -u AWS --password-stdin $(terraform output -json | jq --raw-output .war.value.war_builder.repository_url)
 ```
+
