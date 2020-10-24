@@ -4,11 +4,20 @@ version: 0.2
 # run-as: root
 env:
   variables:
-    foo: bar
-
+    FROM_IMAGE: "debian"
+    FROM_TAG: "10-slim"
+    GHC_VER: "8.8.4"
+    CABAL_VER: "3.2.0.0"
+    IMAGE_NAME: "haskell"
 
 phases:
   build:
     commands:
-      - uname -a
-      - date
+      - >
+        docker build \
+          --build-arg FROM_IMAGE=$FROM_IMAGE \
+          --build-arg FROM_TAG=$FROM_TAG \
+          --build-arg GHC_VER=$GHC_VER \
+          --build-arg CABAL_VER=$CABAL_VER \
+          -t mgreenly/$IMAGE_NAME:latest \
+          .
