@@ -14,5 +14,4 @@ phases:
   build:
     commands:
       - cd codebuild/haskell
-      - docker info
-      # - ./build.sh
+      - ./build.sh
