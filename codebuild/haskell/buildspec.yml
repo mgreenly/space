@@ -1,0 +1,14 @@
+version: 0.2
+
+# run-as: root
+env:
+  shell: /bin/bash
+  variables:
+    foo: bar
+
+
+phases:
+  build:
+    commands:
+      - uname -a
+      - date
