@@ -15,3 +15,8 @@ phases:
     commands:
       - cd api
       - ./build
+
+  cache:
+    paths:
+      - '/api/.cabal/**/*'
+      - '/api/dist-newstyle/**/*'
