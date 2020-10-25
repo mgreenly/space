@@ -14,7 +14,7 @@ import Network.HTTP.Types.Header (hContentType)
 
 main = do
     let port = 3000
-    putStrLn $ "Listening on port " ++ show port
+    putStrLn $ "Listening on port: " ++ show port
     run port app
 
 app :: Application
