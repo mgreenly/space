@@ -20,6 +20,11 @@ echo $(aws ecr get-login-password --region us-east-2) | docker login -u AWS --pa
 docker pull ${BUILDER_IMAGE}:${BUILDER_TAG}
 
 
+echo "DEBUG"
+id -u
+id -g
+whoami
+
 #
 # the provided arguments are passed to the container
 #
@@ -31,9 +36,10 @@ docker run --rm -i -t \
   ${BUILDER_IMAGE}:${BUILDER_TAG} \
   cabal build
 
+echo $?
+echo "after"
 
 mkdir -p files/usr/local/bin
-
 find dist-newstyle/ -executable -type f ! -name '*.so' -exec cp {} files/usr/local/bin \;
 
 docker build \
