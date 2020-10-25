@@ -35,12 +35,12 @@ whoami
 #
 mkdir -p .debian-cabal
 chmod g+s .debian-cabal
-
+ls -lha
+echo "--------------------------------------------------"
 #
 # the provided arguments are passed to the container
 #
 docker run --rm -t \
-  -u 1000:1000 \
   -v $PWD/.debian-cabal:/home/haskell/.cabal \
   -v $PWD:/workdir  \
   -w /workdir \
