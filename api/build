@@ -26,8 +26,37 @@ echo "DEBUG"
 id -u
 id -g
 whoami
-ls -lha
-ls -lha files/usr/local/bin
+
+
+#
+# If the cabal directory doesn't exist before running commands
+# it will be created by docker but will be owned by root.  we
+# want it to be owned by the same user who's running this script
+#
+mkdir -p .debian-cabal
+
+
+#
+# the provided arguments are passed to the container
+#
+docker run --rm -t \
+  -u $(id -u):$(id -g) \
+  -v $PWD/.debian-cabal:/home/haskell/.cabal \
+  -v $PWD:/workdir  \
+  -w /workdir \
+  ${BUILDER_IMAGE}:${BUILDER_TAG} \
+  cabal update
+
+#
+# the provided arguments are passed to the container
+#
+docker run --rm -t \
+  -u $(id -u):$(id -g) \
+  -v $PWD/.debian-cabal:/home/haskell/.cabal \
+  -v $PWD:/workdir  \
+  -w /workdir \
+  ${BUILDER_IMAGE}:${BUILDER_TAG} \
+  cabal configure
 
 #
 # the provided arguments are passed to the container
@@ -42,6 +71,8 @@ docker run --rm -t \
 
 echo $?
 echo "after"
+ls -lha
+ls -lha files/usr/local/bin
 
 mkdir -p files/usr/local/bin
 find dist-newstyle/ -executable -type f ! -name '*.so' -exec cp {} files/usr/local/bin \;
