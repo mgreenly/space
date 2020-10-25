@@ -34,13 +34,13 @@ whoami
 # want it to be owned by the same user who's running this script
 #
 mkdir -p .debian-cabal
-
+chmod g+s .debian-cabal
 
 #
 # the provided arguments are passed to the container
 #
 docker run --rm -t \
-  -u 1000:1000
+  -u 1000:1000 \
   -v $PWD/.debian-cabal:/home/haskell/.cabal \
   -v $PWD:/workdir  \
   -w /workdir \
