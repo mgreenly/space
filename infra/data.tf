@@ -45,3 +45,7 @@ data "aws_iam_policy" "code_commit_power_user" {
 data "aws_iam_policy" "cloud_watch_logs_full_access" {
   arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
 }
+
+data "aws_iam_policy" "s3_full_access" {
+  arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+}

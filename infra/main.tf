@@ -337,6 +337,14 @@ resource "aws_iam_role" "war_codebuild" {
 ROLE
 }
 
+resource "aws_iam_role_policy_attachment" "war_codebuild_and_s3_full_access" {
+  role = aws_iam_role.war_codebuild.name
+  policy_arn = data.aws_iam_policy.s3_full_access.arn
+  depends_on = [
+      aws_iam_role.war_codebuild
+  ]
+}
+
 resource "aws_iam_role_policy_attachment" "ec2_container_registry_power_user" {
   role = aws_iam_role.war_codebuild.name
   policy_arn = data.aws_iam_policy.ec2_container_registry_power_user.arn
@@ -436,6 +444,17 @@ resource "aws_ecr_repository" "war_api" {
   name = "war_api"
 }
 
+
+resource "aws_s3_bucket" "war" {
+  bucket = "war.logic-refinery.io"
+  acl    = "private"
+
+  # tags = {
+  #   Name        = "My bucket"
+  #   Environment = "Dev"
+  # }
+}
+
 resource "aws_codebuild_project" "war_api" {
     badge_enabled  = false
     build_timeout  = 10
@@ -453,8 +472,9 @@ resource "aws_codebuild_project" "war_api" {
     }
 
     cache {
+        type     = "S3"
+        location = "${aws_s3_bucket.war.bucket}/codebuild/cache/war"
         modes = []
-        type  = "NO_CACHE"
     }
 
     environment {
