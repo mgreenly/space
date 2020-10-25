@@ -13,8 +13,5 @@ env:
 phases:
   build:
     commands:
-      - cd app
-      - pwd
-      - env
-      - which bash
+      - cd api
       - ./build.sh
