@@ -47,9 +47,6 @@ docker run --rm -t \
   ${BUILDER_IMAGE}:${BUILDER_TAG} \
   cabal update
 
-ls -lha .debian-cabal/
-exit
-
 #
 # the provided arguments are passed to the container
 #
