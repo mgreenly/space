@@ -33,19 +33,17 @@ whoami
 # it will be created by docker but will be owned by root.  we
 # want it to be owned by the same user who's running this script
 #
-mkdir -p .debian-cabal
-# chmod g+s .debian-cabal
+mkdir -p .cabal
 ls -lha
 echo "--------------------------------------------------"
 #
 # the provided arguments are passed to the container
 #
 docker run --rm -t \
-  -v $PWD/.debian-cabal:/home/haskell/.cabal \
+  -u $(id -u):$(id -g) \
   -v $PWD:/workdir  \
   -w /workdir \
   -e HOME=/workdir \
-  -u root \
   ${BUILDER_IMAGE}:${BUILDER_TAG} \
   cabal update
 
@@ -57,9 +55,9 @@ exit
 #
 docker run --rm -t \
   -u $(id -u):$(id -g) \
-  -v $PWD/.debian-cabal:/home/haskell/.cabal \
   -v $PWD:/workdir  \
   -w /workdir \
+  -e HOME=/workdir \
   ${BUILDER_IMAGE}:${BUILDER_TAG} \
   cabal configure
 
@@ -68,9 +66,9 @@ docker run --rm -t \
 #
 docker run --rm -t \
   -u $(id -u):$(id -g) \
-  -v $PWD/.debian-cabal:/home/haskell/.cabal \
   -v $PWD:/workdir  \
   -w /workdir \
+  -e HOME=/workdir \
   ${BUILDER_IMAGE}:${BUILDER_TAG} \
   cabal build
 
