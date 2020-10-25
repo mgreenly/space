@@ -100,9 +100,9 @@
 
 version: 0.2
 
+#shell: /bin/sh
 # run-as: root
 env:
-  shell: /bin/bash
   variables:
     foo: bar
 

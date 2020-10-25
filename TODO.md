@@ -2,6 +2,11 @@
 
 In theory this will become a roughly stack ranked list of stuff that needs doing.
 
+
+* terraform the codebuild projects for both haskell and api
+* the role that the codebuild uses needs access to the ecr for both
+* update the build scripts so they're not hardcoded with urls
+
 * improve the root readme
 * figure out ci/cd plan
     * what docker repository to use

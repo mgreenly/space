@@ -31,7 +31,7 @@ mkdir -p files/usr/local/bin
 
 find dist-newstyle/ -executable -type f ! -name '*.so' -exec cp {} files/usr/local/bin \;
 
-IMAGE_NAME="900253156012.dkr.ecr.us-east-2.amazonaws.com/war_api"
+# IMAGE_NAME="900253156012.dkr.ecr.us-east-2.amazonaws.com/war_api"
 
 docker build \
   --build-arg FROM_IMAGE=$FROM_IMAGE \
