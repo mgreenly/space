@@ -6,15 +6,23 @@ output "war" {
     },
     server: {
       public_ip: aws_instance.server.public_ip,
-     private_ip: aws_instance.server.private_ip
+      private_ip: aws_instance.server.private_ip
     }
-    war_builder: {
-      repository_id: aws_ecr_repository.war_builder.registry_id,
-      repository_url: aws_ecr_repository.war_builder.repository_url
+    git: {
+      clone_url_ssh: aws_codecommit_repository.war.clone_url_ssh,
+      clone_url_http: aws_codecommit_repository.war.clone_url_http,
     },
-    repo_ssh_url: aws_codecommit_repository.test.clone_url_ssh,
-    repo_http_url: aws_codecommit_repository.test.clone_url_http
-    iam_user_name: data.aws_iam_user.mgreenly.user_name
-    iam_user_id: data.aws_iam_user.mgreenly.user_id
+    ecr: {
+      haskell: {
+        repository_id: aws_ecr_repository.war_haskell.registry_id,
+        repository_url: aws_ecr_repository.war_haskell.repository_url
+      },
+      api: {
+        repository_id: aws_ecr_repository.war_api.registry_id,
+        repository_url: aws_ecr_repository.war_api.repository_url
+      }
+    }
+    # iam_user_name: data.aws_iam_user.mgreenly.user_name,
+    # iam_user_id: data.aws_iam_user.mgreenly.user_id,
   }
 }
