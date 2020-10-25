@@ -14,4 +14,4 @@ phases:
   build:
     commands:
       - cd api
-      - ./build.sh
+      - ./build
