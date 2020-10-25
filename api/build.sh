@@ -9,7 +9,7 @@ FROM_TAG="10-slim"
 #
 # Automation to build and upload this docker image. 
 #
-echo $(aws ecr --profile logic-refinery get-login-password --region us-east-2) | docker login -u AWS --password-stdin $BUILDER_IMAGE
+echo $(aws ecr get-login-password --region us-east-2) | docker login -u AWS --password-stdin $BUILDER_IMAGE
 
 docker pull ${BUILDER_IMAGE}:${BUILDER_TAG}
 
@@ -38,6 +38,6 @@ docker build \
   -t $IMAGE_NAME:latest \
   .
 
-echo $(aws ecr --profile logic-refinery get-login-password --region us-east-2) | docker login -u AWS --password-stdin $IMAGE_NAME
+echo $(aws ecr get-login-password --region us-east-2) | docker login -u AWS --password-stdin $IMAGE_NAME
 
 docker push $IMAGE_NAME:latest
