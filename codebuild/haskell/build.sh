@@ -7,7 +7,6 @@ FROM_IMAGE="debian"
 FROM_TAG="10-slim"
 GHC_VER="8.8.4"
 CABAL_VER="3.2.0.0"
-IMAGE_NAME="900253156012.dkr.ecr.us-east-2.amazonaws.com/war_haskell"
 
 docker build \
   --build-arg FROM_IMAGE=$FROM_IMAGE \
@@ -17,6 +16,6 @@ docker build \
   -t $IMAGE_NAME:latest \
   .
 
-echo $(aws ecr get-login-password --region us-east-2) | docker login -u AWS --password-stdin 900253156012.dkr.ecr.us-east-2.amazonaws.com/war_haskell
+echo $(aws ecr get-login-password --region us-east-2) | docker login -u AWS --password-stdin $IMAGE_NAME
 
 docker push $IMAGE_NAME:latest
