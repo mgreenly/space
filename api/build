@@ -40,12 +40,16 @@ mkdir -p .debian-cabal
 # the provided arguments are passed to the container
 #
 docker run --rm -t \
-  -u $(id -u):$(id -g) \
+  -u 1000:1000
   -v $PWD/.debian-cabal:/home/haskell/.cabal \
   -v $PWD:/workdir  \
   -w /workdir \
+  -e HOME=/workdir \
   ${BUILDER_IMAGE}:${BUILDER_TAG} \
   cabal update
+
+ls -lha .debian-cabal/
+exit
 
 #
 # the provided arguments are passed to the container
