@@ -482,7 +482,7 @@ resource "aws_codebuild_project" "war_api" {
     }
 
     source {
-        buildspec           = "app/buildspec.yml"
+        buildspec           = "api/buildspec.yml"
         git_clone_depth     = 1
         insecure_ssl        = false
         location            = aws_codecommit_repository.war.clone_url_http
