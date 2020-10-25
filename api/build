@@ -34,7 +34,7 @@ whoami
 # want it to be owned by the same user who's running this script
 #
 mkdir -p .debian-cabal
-chmod g+s .debian-cabal
+# chmod g+s .debian-cabal
 ls -lha
 echo "--------------------------------------------------"
 #
@@ -45,6 +45,7 @@ docker run --rm -t \
   -v $PWD:/workdir  \
   -w /workdir \
   -e HOME=/workdir \
+  -u root \
   ${BUILDER_IMAGE}:${BUILDER_TAG} \
   cabal update
 
