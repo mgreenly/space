@@ -465,6 +465,11 @@ resource "aws_codebuild_project" "war_api" {
       type                        = "LINUX_CONTAINER"
 
       environment_variable {
+        name  = "BUILDER_IMAGE"
+        value = aws_ecr_repository.war_haskell.repository_url
+      }
+
+      environment_variable {
         name  = "IMAGE_NAME"
         value = aws_ecr_repository.war_api.repository_url
       }
