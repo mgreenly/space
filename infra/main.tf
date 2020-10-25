@@ -399,7 +399,7 @@ resource "aws_codebuild_project" "war_haskell" {
   }
 
   environment {
-    compute_type                = "BUILD_GENERAL1_SMALL"
+    compute_type                = "BUILD_GENERAL1_LARGE"
     image                       = "aws/codebuild/standard:4.0"
     image_pull_credentials_type = "CODEBUILD"
     privileged_mode             = true
@@ -478,7 +478,7 @@ resource "aws_codebuild_project" "war_api" {
     }
 
     environment {
-      compute_type                = "BUILD_GENERAL1_SMALL"
+      compute_type                = "BUILD_GENERAL1_LARGE"
       image                       = "aws/codebuild/standard:4.0"
       image_pull_credentials_type = "CODEBUILD"
       privileged_mode             = true
