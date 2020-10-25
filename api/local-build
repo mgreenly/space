@@ -8,5 +8,5 @@ export BUILDER_IMAGE="$(cd ../infra && terraform output -json | jq --raw-output 
 export IMAGE_NAME="$(cd ../infra && terraform output -json | jq --raw-output .war.value.ecr.api.repository_url)"
 export AWS_PROFILE="logic-refinery"
 
-./build.sh
+./build
 
