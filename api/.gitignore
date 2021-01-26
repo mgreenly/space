@@ -1,4 +1,5 @@
 .cabal/**/*
+.debian-cabal
 dist-newstyle/**/*
 files
 cabal.project.local

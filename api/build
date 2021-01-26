@@ -2,8 +2,8 @@
 
 # setup env vars needed by build if we're running locally
 if [ -z "${CODEBUILD_BUILD_ID}" ]; then
-  export BUILDER_IMAGE="$(cd ../infra && terraform output -json | jq --raw-output .war.value.ecr.haskell.repository_url)"
-  export IMAGE_NAME="$(cd ../infra && terraform output -json | jq --raw-output .war.value.ecr.api.repository_url)"
+  export BUILDER_IMAGE="$(cd ../infra/prod && terraform output -json | jq --raw-output .war.value.ecr.haskell.repository_url)"
+  export IMAGE_NAME="$(cd ../infra/prod && terraform output -json | jq --raw-output .war.value.ecr.app.repository_url)"
   export AWS_PROFILE="logic-refinery"
 fi
 

@@ -47,13 +47,13 @@ resource "aws_security_group" "war_instance" {
 
   description = "applied to all instances in the war cluster"
 
-  # ingress {
-  #   description       = "DEBUG: allow all inbound traffic from known ip"
-  #   from_port         = 0
-  #   to_port           = 0
-  #   protocol          = -1
-  #   cidr_blocks       = ["207.191.158.151/32", "208.118.151.85/32"]
-  # }
+  ingress {
+    description       = "DEBUG: allow all inbound traffic from known ip"
+    from_port         = 0
+    to_port           = 0
+    protocol          = -1
+    cidr_blocks       = ["161.199.186.47/32"]
+  }
 
   ingress {
     description       = "allow inbound http from alb"
@@ -93,7 +93,7 @@ resource "aws_security_group" "war_server" {
     from_port         = 6443
     to_port           = 6443
     protocol          = "tcp"
-    cidr_blocks       = ["207.191.158.151/32", "208.118.151.85/32"]
+    cidr_blocks       = ["161.199.186.47/32"]
   }
 
   ingress {
@@ -183,12 +183,28 @@ resource "aws_security_group" "war_alb" {
   }
 }
 
+#
+# key pair used for all war instances.
+#
+# example ~/.ssh/config
+#
+#   HOST *war.logic-refinery.io
+#     User admin
+#     IdentityFile "~/.ssh/war.logic-refinery.io"
+#     StrictHostKeyChecking no
+#     UserKnownHostsFile /dev/null
+#
+resource "aws_key_pair" "war-logic-refinery" {
+  key_name = "war.logic-refinery.io"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC1VK1pvSuOklw7/EIIOxQZ++dCMt2ZCtOkrDylasVe3lhleHCmpxqic/JGe7p5xKIJ6IM1SwgT00AbTlotKKWRegJUyGr7ArBU0Ht+3Arej22jn/eOIBJwg4AlhTWWzLQQB/1h4h3Okoh1aOXfr7wyJmbjIlmCLtp1KKYwUQT6HiyIDK3MouspgE5S+fAO+LspRPJvw5f4J7S8BCsV7YYEHg7mtd9WC5LBkyJHgEyWZOm6yg8RJLDkoMJJh2EJE1NT7XUsdC4KwkLvgDDyUB8QbiEhU4PXREzGdoINYeO9ssOLdmwsQy0aFSOztXbpsMaj3O09x5ySTqcsrAMy1t3xDBcsQ3/Kkj9XFh6i98kQ0uQnsHER/FdI4/seO4Xpd9rEh06elhSZMTNQrayaFxdB26z4JZjIkS1j090IX/fwezawxVhzKvedyIUTLqqkx3jE7cAl0tNueaR5Dxf9isLblMm6eVzodLJMSgcY/JxdZ+gU1RdwQGaY6RnxVHXEuAE= war.logic-refinery.io"
+}
+
 
 #
 # Create instances
 #
 resource "aws_instance" "server" {
-  ami               = "ami-08f6e7446faea65e0"
+  ami               = "ami-06be10ae4a207f54a" # https://wiki.debian.org/Cloud/AmazonEC2Image/Buster
   instance_type     = "t3a.small"
   availability_zone = "us-east-2a"
 
@@ -196,7 +212,7 @@ resource "aws_instance" "server" {
     Name = "server"
   }
 
-  key_name = "old-logic-refinery"
+  key_name = "war.logic-refinery.io"
 
   security_groups = [
     data.aws_security_group.default.name,
@@ -222,7 +238,7 @@ resource "aws_route53_record" "server_int" {
 }
 
 resource "aws_instance" "agent1" {
-  ami               = "ami-08f6e7446faea65e0"
+  ami               = "ami-06be10ae4a207f54a" # https://wiki.debian.org/Cloud/AmazonEC2Image/Buster
   instance_type     = "t3a.small"
   availability_zone = "us-east-2a"
 
@@ -230,7 +246,7 @@ resource "aws_instance" "agent1" {
     Name = "agent1"
   }
 
-  key_name = "old-logic-refinery"
+  key_name = "war.logic-refinery.io"
 
   security_groups = [
     data.aws_security_group.default.name,
@@ -312,214 +328,4 @@ resource "aws_route53_record" "default" {
     zone_id                   = aws_alb.war.zone_id
     evaluate_target_health    = true
   }
-}
-
-
-
-
-# create the role for the build instance
-resource "aws_iam_role" "war_codebuild" {
-  name = "war-codebuild"
-
-  assume_role_policy = <<ROLE
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "codebuild.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-ROLE
-}
-
-resource "aws_iam_role_policy_attachment" "war_codebuild_and_s3_full_access" {
-  role = aws_iam_role.war_codebuild.name
-  policy_arn = data.aws_iam_policy.s3_full_access.arn
-  depends_on = [
-      aws_iam_role.war_codebuild
-  ]
-}
-
-resource "aws_iam_role_policy_attachment" "ec2_container_registry_power_user" {
-  role = aws_iam_role.war_codebuild.name
-  policy_arn = data.aws_iam_policy.ec2_container_registry_power_user.arn
-  depends_on = [
-      aws_iam_role.war_codebuild
-  ]
-}
-
-resource "aws_iam_role_policy_attachment" "war_codebuild_and_cloud_watch_logs_full_access" {
-  role = aws_iam_role.war_codebuild.name
-  policy_arn = data.aws_iam_policy.cloud_watch_logs_full_access.arn
-  depends_on = [
-      aws_iam_role.war_codebuild
-  ]
-}
-
-resource "aws_iam_role_policy_attachment" "war_codebuild_and_code_commit_power_user" {
-  role = aws_iam_role.war_codebuild.name
-  policy_arn = data.aws_iam_policy.code_commit_power_user.arn
-  depends_on = [
-      aws_iam_role.war_codebuild
-  ]
-}
-
-resource "aws_codecommit_repository" "war" {
-  repository_name = "war"
-  description     = "The war ci/cd repo"
-}
-
-resource "aws_ecr_repository" "war_haskell" {
-  name = "war_haskell"
-}
-
-
-resource "aws_codebuild_project" "war_haskell" {
-  name = "war_haskell"
-  service_role = aws_iam_role.war_codebuild.arn
-  source_version = "refs/heads/main"
-  queued_timeout = 480
-  build_timeout  = 60
-
-
-  artifacts {
-    encryption_disabled    = false
-    override_artifact_name = false
-    type                   = "NO_ARTIFACTS"
-  }
-
-  cache {
-    modes = []
-    type  = "NO_CACHE"
-  }
-
-  environment {
-    compute_type                = "BUILD_GENERAL1_LARGE"
-    image                       = "aws/codebuild/standard:4.0"
-    image_pull_credentials_type = "CODEBUILD"
-    privileged_mode             = true
-    type                        = "LINUX_CONTAINER"
-
-    environment_variable {
-      name  = "IMAGE_NAME"
-      value = aws_ecr_repository.war_haskell.repository_url
-    }
-  }
-
-  logs_config {
-    cloudwatch_logs {
-      status = "ENABLED"
-    }
-
-    s3_logs {
-      encryption_disabled = false
-      status              = "DISABLED"
-    }
-  }
-
-  source {
-      buildspec           = "codebuild/haskell/buildspec.yml"
-      git_clone_depth     = 1
-      insecure_ssl        = false
-      location            = aws_codecommit_repository.war.clone_url_http
-      report_build_status = false
-      type                = "CODECOMMIT"
-
-      git_submodules_config {
-          fetch_submodules = false
-      }
-  }
-
-  depends_on = [
-      aws_iam_role.war_codebuild
-  ]
-}
-
-resource "aws_ecr_repository" "war_api" {
-  name = "war_api"
-}
-
-
-resource "aws_s3_bucket" "war" {
-  bucket = "war.logic-refinery.io"
-  acl    = "private"
-
-  # tags = {
-  #   Name        = "My bucket"
-  #   Environment = "Dev"
-  # }
-}
-
-resource "aws_codebuild_project" "war_api" {
-    badge_enabled  = false
-    build_timeout  = 10
-    description    = "The actual api"
-    name           = "war_api"
-    queued_timeout = 60
-    service_role = aws_iam_role.war_codebuild.arn
-    source_version = "refs/heads/main"
-    tags           = {}
-
-    artifacts {
-        encryption_disabled    = false
-        override_artifact_name = false
-        type                   = "NO_ARTIFACTS"
-    }
-
-    cache {
-        type     = "S3"
-        location = "${aws_s3_bucket.war.bucket}/codebuild/cache/war"
-        modes = []
-    }
-
-    environment {
-      compute_type                = "BUILD_GENERAL1_LARGE"
-      image                       = "aws/codebuild/standard:4.0"
-      image_pull_credentials_type = "CODEBUILD"
-      privileged_mode             = true
-      type                        = "LINUX_CONTAINER"
-
-      environment_variable {
-        name  = "BUILDER_IMAGE"
-        value = aws_ecr_repository.war_haskell.repository_url
-      }
-
-      environment_variable {
-        name  = "IMAGE_NAME"
-        value = aws_ecr_repository.war_api.repository_url
-      }
-    }
-
-    logs_config {
-        cloudwatch_logs {
-            status = "ENABLED"
-        }
-
-        s3_logs {
-            encryption_disabled = false
-            status              = "DISABLED"
-        }
-    }
-
-    source {
-        buildspec           = "api/buildspec.yml"
-        git_clone_depth     = 1
-        insecure_ssl        = false
-        location            = aws_codecommit_repository.war.clone_url_http
-        report_build_status = false
-        type                = "CODECOMMIT"
-
-        git_submodules_config {
-            fetch_submodules = false
-        }
-   }
-
-  depends_on = [
-      aws_iam_role.war_codebuild
-  ]
 }
