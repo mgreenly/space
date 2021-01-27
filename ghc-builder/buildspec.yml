@@ -13,5 +13,5 @@ env:
 phases:
   build:
     commands:
-      - cd codebuild/haskell
+      - cd ghc_builder
       - ./build.sh

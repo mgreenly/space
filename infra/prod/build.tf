@@ -118,7 +118,7 @@ resource "aws_codebuild_project" "ghc_builder" {
   }
 
   source {
-      buildspec           = "ghc-build/buildspec.yml"
+      buildspec           = "ghc-builder/buildspec.yml"
       git_clone_depth     = 1
       insecure_ssl        = false
       location            = aws_codecommit_repository.ghc_builder.clone_url_http
