@@ -3,7 +3,7 @@ version: 0.2
 #  shell: /bin/bash
 # run-as: root
 env:
-  variables:
+  exported-variables:
     FROM_IMAGE: "debian"
     FROM_TAG: "10-slim"
     GHC_VER: "8.10.3"
