@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 #
 # When we're running locally we need to define these values.  When we're
 # running in codebuilder the buildspec.yaml will define these.
@@ -20,6 +21,8 @@ docker pull ${FROM_IMAGE}:${FROM_TAG}
 
 # build the new image
 docker build \
+  --build-arg FROM_IMAGE=$FROM_IMAGE \
+  --build-arg FROM_TAG=$FROM_TAG \
   --build-arg GHC_VER=$GHC_VER \
   --build-arg CABAL_VER=$CABAL_VER \
   -t $IMAGE_NAME:$GHC_VER \
