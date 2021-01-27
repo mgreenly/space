@@ -95,7 +95,7 @@ resource "aws_codebuild_project" "ghc_builder" {
 
   environment {
     compute_type                = "BUILD_GENERAL1_LARGE"
-    image                       = "aws/codebuild/standard:4.0"
+    image                       = "aws/codebuild/standard:5.0"
     image_pull_credentials_type = "CODEBUILD"
     privileged_mode             = true
     type                        = "LINUX_CONTAINER"

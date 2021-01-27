@@ -33,7 +33,8 @@ docker build \
 #
 if [ ! -z "${CODEBUILD_BUILD_ID}" ]; then
 
-  echo $(aws --profile $AWS_PROFILE ecr get-login-password --region us-east-2) | docker login -u AWS --password-stdin $IMAGE_NAME
+  #echo $(aws --profile $AWS_PROFILE ecr get-login-password --region us-east-2) | docker login -u AWS --password-stdin $IMAGE_NAME
+  echo $(aws ecr get-login-password --region us-east-2) | docker login -u AWS --password-stdin $IMAGE_NAME
 
   docker push $IMAGE_NAME:$GHC_VER
 fi
