@@ -4,6 +4,3 @@ ARG FROM_TAG
 FROM ${FROM_IMAGE}:${FROM_TAG}
 
 ADD files/usr/local/bin/ /usr/local/bin/
-
-# ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-# CMD ["/bin/bash"]
