@@ -13,5 +13,5 @@ env:
 phases:
   build:
     commands:
-      - cd ghc_builder
+      - cd ghc-builder
       - ./build.sh
