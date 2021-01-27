@@ -172,15 +172,9 @@ resource "aws_codebuild_project" "builder_ghc" {
     }
 
     environment_variable {
-      name  = "FROM_TAG"
-      value = "latest"
-    }
-
-    environment_variable {
       name  = "IMAGE_NAME"
       value = aws_ecr_repository.builder_ghc.repository_url
     }
-
   }
 
   logs_config {

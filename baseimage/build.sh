@@ -1,7 +1,7 @@
 #!/bin/bash
 
 FROM_IMAGE="debian"
-FROM_TAG="10-slim"
+FROM_TAG="10.7-slim"
 
 #
 # Supply this value for local builds, online it's provided by the codebuild project.
@@ -19,7 +19,7 @@ docker pull ${FROM_IMAGE}:${FROM_TAG}
 docker build \
   --build-arg=FROM_IMAGE=$FROM_IMAGE \
   --build-arg=FROM_TAG=$FROM_TAG \
-  -t $IMAGE_NAME:latest \
+  -t $IMAGE_NAME:$FROM_TAG \
   .
 
 #
@@ -29,5 +29,5 @@ if [ ! -z "${CODEBUILD_BUILD_ID}" ]; then
 
   echo $(aws ecr get-login-password --region us-east-2) | docker login -u AWS --password-stdin $IMAGE_NAME
 
-  docker push $IMAGE_NAME:latest
+  docker push $IMAGE_NAME:$FROM_TAG
 fi
