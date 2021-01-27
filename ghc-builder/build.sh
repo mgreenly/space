@@ -1,17 +1,16 @@
 #!/bin/bash
 
+FROM_IMAGE="debian"
+FROM_TAG="10-slim"
+GHC_VER="8.10.3"
+CABAL_VER="3.2.0.0"
+
 
 #
-# When we're running locally we need to define these values.  When we're
-# running in codebuilder the buildspec.yaml will define these.
+# Supply this value for local builds, online it's provided by the codebuild project.
 #
 if [ -z "${CODEBUILD_BUILD_ID}" ]; then
-  FROM_IMAGE="debian"
-  FROM_TAG="10-slim"
-  GHC_VER="8.10.3"
-  CABAL_VER="3.2.0.0"
   IMAGE_NAME=$(cd ../infra/prod && terraform output -json | jq '.war.value.ecr.ghc_builder.repository_url' --raw-output)
-  AWS_PROFILE="logic-refinery"
 fi
 
 #
@@ -29,7 +28,7 @@ docker build \
   .
 
 #
-# push the image if we're not running locally
+# We don't want to push the image during local builds, only during codebuild builds.
 #
 if [ ! -z "${CODEBUILD_BUILD_ID}" ]; then
 

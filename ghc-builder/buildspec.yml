@@ -1,16 +1,6 @@
 version: 0.2
 
-#  shell: /bin/bash
-# run-as: root
-env:
-  variables:
-    FROM_IMAGE: "debian"
-    FROM_TAG: "10-slim"
-    GHC_VER: "8.10.3"
-    CABAL_VER: "3.2.0.0"
-
 phases:
   build:
     commands:
-      - cd ghc-builder
-      - ./build.sh
+      - cd ghc-builder && ./build.sh
