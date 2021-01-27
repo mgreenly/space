@@ -3,11 +3,10 @@
 GHC_VER="8.10.3"
 CABAL_VER="3.2.0.0"
 FROM_TAG="10.7-slim"
+FROM_IMAGE="900253156012.dkr.ecr.us-east-2.amazonaws.com/baseimage"
+IMAGE_NAME="900253156012.dkr.ecr.us-east-2.amazonaws.com/builder_ghc"
 
 if [ -z "${CODEBUILD_BUILD_ID}" ]; then
-  # Supply these values for local builds, codebuild projects provide them online
-  FROM_IMAGE="900253156012.dkr.ecr.us-east-2.amazonaws.com/baseimage"
-  IMAGE_NAME=$(cd ../infra/prod && terraform output -json | jq '.war.value.ecr.builder_ghc.repository_url' --raw-output)
   echo $(aws --profile=logic-refinery ecr get-login-password --region us-east-2) | docker login -u AWS --password-stdin $IMAGE_NAME
 else
   echo $(aws ecr get-login-password --region us-east-2) | docker login -u AWS --password-stdin $IMAGE_NAME

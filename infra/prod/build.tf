@@ -95,11 +95,6 @@ resource "aws_codebuild_project" "baseimage" {
     image_pull_credentials_type = "CODEBUILD"
     privileged_mode             = true
     type                        = "LINUX_CONTAINER"
-
-    environment_variable {
-      name  = "IMAGE_NAME"
-      value = aws_ecr_repository.baseimage.repository_url
-    }
   }
 
   logs_config {
@@ -165,16 +160,6 @@ resource "aws_codebuild_project" "builder_ghc" {
     image_pull_credentials_type = "CODEBUILD"
     privileged_mode             = true
     type                        = "LINUX_CONTAINER"
-
-    environment_variable {
-      name  = "FROM_IMAGE"
-      value = aws_ecr_repository.baseimage.repository_url
-    }
-
-    environment_variable {
-      name  = "IMAGE_NAME"
-      value = aws_ecr_repository.builder_ghc.repository_url
-    }
   }
 
   logs_config {
