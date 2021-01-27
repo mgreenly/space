@@ -3,14 +3,14 @@
 GHC_VER="8.10.3"
 CABAL_VER="3.2.0.0"
 
-
-#
-# Supply this value for local builds, online it's provided by the codebuild project.
-#
 if [ -z "${CODEBUILD_BUILD_ID}" ]; then
+  # Supply these values for local builds, codebuild projects provide them online
   FROM_IMAGE="900253156012.dkr.ecr.us-east-2.amazonaws.com/baseimage_ghc"
   FROM_TAG="latest"
   IMAGE_NAME=$(cd ../infra/prod && terraform output -json | jq '.war.value.ecr.ghc_builder.repository_url' --raw-output)
+  echo $(aws --profile=logic-refinery ecr get-login-password --region us-east-2) | docker login -u AWS --password-stdin $IMAGE_NAME
+else
+  echo $(aws ecr get-login-password --region us-east-2) | docker login -u AWS --password-stdin $IMAGE_NAME
 fi
 
 #
@@ -31,8 +31,5 @@ docker build \
 # We don't want to push the image during local builds, only during codebuild builds.
 #
 if [ ! -z "${CODEBUILD_BUILD_ID}" ]; then
-
-  echo $(aws ecr get-login-password --region us-east-2) | docker login -u AWS --password-stdin $IMAGE_NAME
-
   docker push $IMAGE_NAME:$GHC_VER
 fi
