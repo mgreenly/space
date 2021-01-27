@@ -1,9 +1,9 @@
 ARG FROM_IMAGE
 ARG FROM_TAG
+FROM ${FROM_IMAGE}:${FROM_TAG}
+
 ARG GHC_VER
 ARG CABAL_VER
-
-FROM ${FROM_IMAGE}:${FROM_TAG}
 
 COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
 
@@ -33,18 +33,11 @@ ENV PATH="/home/haskell/.cabal/bin:/home/haskell/.ghcup/bin:${PATH}"
 
 USER haskell
 
-RUN echo "GHC_VER=${GHC_VER}"
-RUN echo "CABAL_VER=${CABAL_VER}"
-
 RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org |\
     BOOTSTRAP_HASKELL_NONINTERACTIVE=true \
-    BOOTSTRAP_HASKELL_GHC_VERSION=8.10.3 \
-    BOOTSTRAP_HASKELL_CABAL_VERSION=3.2.0.0 \
+    BOOTSTRAP_HASKELL_GHC_VERSION=${GHC_VER} \
+    BOOTSTRAP_HASKELL_CABAL_VERSION=${CABAL_VER} \
     sh
-
-    # BOOTSTRAP_HASKELL_GHC_VERSION=${GHC_VER} \
-    # BOOTSTRAP_HASKELL_CABAL_VERSION=${CABAL_VER} \
-    # sh
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["/bin/bash"]

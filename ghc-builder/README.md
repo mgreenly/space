@@ -1,7 +1,3 @@
-# debian-haskell
-
-  * [https://hub.docker.com/r/mgreenly/debian-haskell](https://hub.docker.com/r/mgreenly/haskell) - A GHC development environment for Debian Linux
-
 ## Introduction
 
 This image uses ghcup to add ghc and cabal to a base debian image that can later be used
