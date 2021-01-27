@@ -1,5 +1,23 @@
 # TODO
 
+  terraform
+  baseimages             - dir of base images
+    debian10
+  builders               - dir of builders
+    ghc
+    elm
+  backend                - the haskell backend
+  frontend               - the elm frontend
+
+
+
+
+
+
+
+
+
+
 In theory this will become a roughly stack ranked list of stuff that needs doing.
 
 

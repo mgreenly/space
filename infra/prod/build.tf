@@ -59,22 +59,88 @@ resource "aws_iam_role_policy_attachment" "code_commit_power_user_for_codebuild"
 #
 # CODECOMMIT REPOSITORIES
 #
-resource "aws_codecommit_repository" "ghc_builder" {
-  repository_name = "ghc_builder"
-  description     = "This is a GHC docker image used to build haskell applications."
+resource "aws_codecommit_repository" "war" {
+  repository_name = "war"
+  description     = "This is the mono repo holding the entire war app."
 }
 
 #
-# ECR REPOSITORIES
+# BASE IMAGE GHC
+#
+resource "aws_ecr_repository" "baseimage_ghc" {
+  name = "baseimage_ghc"
+}
+
+resource "aws_codebuild_project" "baseimage_ghc" {
+  name = "baseimage_ghc"
+  service_role = aws_iam_role.codebuild.arn
+  source_version = "refs/heads/main"
+  queued_timeout = 480
+  build_timeout  = 60
+
+  artifacts {
+    encryption_disabled    = false
+    override_artifact_name = false
+    type                   = "NO_ARTIFACTS"
+  }
+
+  cache {
+    modes = []
+    type  = "NO_CACHE"
+  }
+
+  environment {
+    compute_type                = "BUILD_GENERAL1_LARGE"
+    image                       = "aws/codebuild/standard:5.0"
+    image_pull_credentials_type = "CODEBUILD"
+    privileged_mode             = true
+    type                        = "LINUX_CONTAINER"
+
+    environment_variable {
+      name  = "IMAGE_NAME"
+      value = aws_ecr_repository.baseimage_ghc.repository_url
+    }
+  }
+
+  logs_config {
+    cloudwatch_logs {
+      status = "ENABLED"
+    }
+
+    s3_logs {
+      encryption_disabled = false
+      status              = "DISABLED"
+    }
+  }
+
+  source {
+      buildspec           = "baseimage-ghc/buildspec.yml"
+      git_clone_depth     = 1
+      insecure_ssl        = false
+      location            = aws_codecommit_repository.war.clone_url_http
+      report_build_status = false
+      type                = "CODECOMMIT"
+
+      git_submodules_config {
+          fetch_submodules = false
+      }
+  }
+
+  depends_on = [
+      aws_iam_role.codebuild
+  ]
+}
+
+
+#
+# BUILDER GHC
 #
 resource "aws_ecr_repository" "ghc_builder" {
   name = "ghc_builder"
 }
 
 
-#
-# CODEBUILD PROJECTS 
-#
+
 resource "aws_codebuild_project" "ghc_builder" {
   name = "ghc_builder"
   service_role = aws_iam_role.codebuild.arn
@@ -101,9 +167,20 @@ resource "aws_codebuild_project" "ghc_builder" {
     type                        = "LINUX_CONTAINER"
 
     environment_variable {
+      name  = "FROM_IMAGE"
+      value = aws_ecr_repository.baseimage_ghc.repository_url
+    }
+
+    environment_variable {
+      name  = "FROM_TAG"
+      value = "latest"
+    }
+
+    environment_variable {
       name  = "IMAGE_NAME"
       value = aws_ecr_repository.ghc_builder.repository_url
     }
+
   }
 
   logs_config {
@@ -121,7 +198,7 @@ resource "aws_codebuild_project" "ghc_builder" {
       buildspec           = "ghc-builder/buildspec.yml"
       git_clone_depth     = 1
       insecure_ssl        = false
-      location            = aws_codecommit_repository.ghc_builder.clone_url_http
+      location            = aws_codecommit_repository.war.clone_url_http
       report_build_status = false
       type                = "CODECOMMIT"
 

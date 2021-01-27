@@ -9,12 +9,14 @@ output "war" {
       private_ip: aws_instance.server.private_ip
     },
     git: {
-      ghc_builder: {
-        clone_url_ssh: aws_codecommit_repository.ghc_builder.clone_url_ssh,
-        clone_url_http: aws_codecommit_repository.ghc_builder.clone_url_http,
-      },
+      clone_url_ssh: aws_codecommit_repository.war.clone_url_ssh,
+      clone_url_http: aws_codecommit_repository.war.clone_url_http,
     },
     ecr: {
+      baseimage_ghc: {
+        repository_id: aws_ecr_repository.baseimage_ghc.registry_id,
+        repository_url: aws_ecr_repository.baseimage_ghc.repository_url
+      },
       ghc_builder: {
         repository_id: aws_ecr_repository.ghc_builder.registry_id,
         repository_url: aws_ecr_repository.ghc_builder.repository_url
