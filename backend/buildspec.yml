@@ -3,9 +3,9 @@ version: 0.2
 phases:
   build:
     commands:
-      - cd backend && - ./build.sh
+      - cd backend && ./build.sh
 
 cache:
   paths:
-    - ./api/.cabal/**/*
-    - ./api/dist-newstyle/**/*
+    - ./backend/.cabal/**/*
+    - ./backend/dist-newstyle/**/*
