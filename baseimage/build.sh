@@ -7,7 +7,7 @@ FROM_TAG="10-slim"
 # Supply this value for local builds, online it's provided by the codebuild project.
 #
 if [ -z "${CODEBUILD_BUILD_ID}" ]; then
-  IMAGE_NAME=$(cd ../infra/prod && terraform output -json | jq '.war.value.ecr.baseimage_ghc.repository_url' --raw-output)
+  IMAGE_NAME=$(cd ../infra/prod && terraform output -json | jq '.war.value.ecr.baseimage.repository_url' --raw-output)
 fi
 
 #

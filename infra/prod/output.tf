@@ -13,9 +13,9 @@ output "war" {
       clone_url_http: aws_codecommit_repository.war.clone_url_http,
     },
     ecr: {
-      baseimage_ghc: {
-        repository_id: aws_ecr_repository.baseimage_ghc.registry_id,
-        repository_url: aws_ecr_repository.baseimage_ghc.repository_url
+      baseimage: {
+        repository_id: aws_ecr_repository.baseimage.registry_id,
+        repository_url: aws_ecr_repository.baseimage.repository_url
       },
       ghc_builder: {
         repository_id: aws_ecr_repository.ghc_builder.registry_id,

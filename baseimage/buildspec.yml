@@ -3,4 +3,4 @@ version: 0.2
 phases:
   build:
     commands:
-      - cd baseimage-ghc && ./build.sh
+      - cd baseimage && ./build.sh
