@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 BUILDER_IMAGE="900253156012.dkr.ecr.us-east-2.amazonaws.com/builder_ghc"
 BUILDER_TAG="8.10.3"
 
