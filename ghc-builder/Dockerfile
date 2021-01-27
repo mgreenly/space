@@ -23,6 +23,7 @@ RUN USERNAME=haskell \
       libgmp10 \
       libncurses-dev \
       libncurses5 \
+      libnuma-dev \
       libtinfo5 \
       zlib1g \
       zlib1g-dev \
@@ -31,13 +32,13 @@ RUN USERNAME=haskell \
 
 ENV PATH="/home/haskell/.cabal/bin:/home/haskell/.ghcup/bin:${PATH}"
 
-USER haskell
+# USER haskell
 
-RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org |\
-    BOOTSTRAP_HASKELL_NONINTERACTIVE=true \
-    BOOTSTRAP_HASKELL_GHC_VERSION=${GHC_VER} \
-    BOOTSTRAP_HASKELL_CABAL_VERSION=${CABAL_VER} \
-    sh
+# RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org |\
+#     BOOTSTRAP_HASKELL_NONINTERACTIVE=true \
+#     BOOTSTRAP_HASKELL_GHC_VERSION=$GHC_VER \
+#     BOOTSTRAP_HASKELL_CABAL_VERSION=$CABAL_VER \
+#     sh
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["/bin/bash"]
