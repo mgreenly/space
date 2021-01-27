@@ -6,9 +6,9 @@ env:
   variables:
     FROM_IMAGE: "debian"
     FROM_TAG: "10-slim"
-    GHC_VER: "8.8.4"
+    GHC_VER: "8.10.3"
     CABAL_VER: "3.2.0.0"
-    IMAGE_NAME: "haskell"
+    IMAGE_NAME: "900253156012.dkr.ecr.us-east-2.amazonaws.com/ghc_builder"
 
 phases:
   build:

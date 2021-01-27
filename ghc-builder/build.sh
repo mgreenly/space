@@ -1,19 +1,16 @@
 #!/bin/bash
 
 #
-# Automation to build and upload this docker image.
-#
-FROM_IMAGE="debian"
-FROM_TAG="10-slim"
-GHC_VER="8.10.3"
-CABAL_VER="3.2.0.0"
-
-#
-# When we're running locally we need to define these values
+# When we're running locally we need to define these values.  When we're
+# running in codebuilder the buildspec.yaml will define these.
 #
 if [ -z "${CODEBUILD_BUILD_ID}" ]; then
-  export IMAGE_NAME=$(cd ../infra/prod && terraform output -json | jq '.war.value.ecr.ghc_builder.repository_url' --raw-output)
-  export AWS_PROFILE="logic-refinery"
+  FROM_IMAGE="debian"
+  FROM_TAG="10-slim"
+  GHC_VER="8.10.3"
+  CABAL_VER="3.2.0.0"
+  IMAGE_NAME=$(cd ../infra/prod && terraform output -json | jq '.war.value.ecr.ghc_builder.repository_url' --raw-output)
+  AWS_PROFILE="logic-refinery"
 fi
 
 #
@@ -21,7 +18,7 @@ fi
 #
 docker pull ${FROM_IMAGE}:${FROM_TAG}
 
-# build the new =image tagged as latest
+# build the new image
 docker build \
   --build-arg GHC_VER=$GHC_VER \
   --build-arg CABAL_VER=$CABAL_VER \
@@ -33,7 +30,6 @@ docker build \
 #
 if [ ! -z "${CODEBUILD_BUILD_ID}" ]; then
 
-  # is this login needed?
   echo $(aws --profile $AWS_PROFILE ecr get-login-password --region us-east-2) | docker login -u AWS --password-stdin $IMAGE_NAME
 
   docker push $IMAGE_NAME:$GHC_VER
