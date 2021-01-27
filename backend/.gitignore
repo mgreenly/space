@@ -3,3 +3,4 @@
 dist-newstyle/**/*
 files
 cabal.project.local
+cabal.project.local*
