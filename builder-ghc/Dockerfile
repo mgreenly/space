@@ -7,8 +7,9 @@ ARG CABAL_VER
 
 COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
 
-RUN USERNAME=haskell \
-    DEBIAN_FRONTEND=noninteractive \
+ENV PATH="/root/.cabal/bin:/root/.ghcup/bin:${PATH}"
+
+RUN DEBIAN_FRONTEND=noninteractive \
     && cd /tmp \
     && apt-get -q -y update \
     && apt-get \
@@ -22,18 +23,14 @@ RUN USERNAME=haskell \
       libnuma-dev \
       libtinfo-dev \
       zlib1g-dev \
-    && adduser --disabled-password --gecos "" --uid 1000 $USERNAME \
-    && chmod +x /usr/local/bin/entrypoint.sh
-
-ENV PATH="/home/haskell/.cabal/bin:/home/haskell/.ghcup/bin:${PATH}"
-
-USER haskell
+    && chmod a+x /usr/local/bin/entrypoint.sh
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org |\
     BOOTSTRAP_HASKELL_NONINTERACTIVE=true \
     BOOTSTRAP_HASKELL_GHC_VERSION=$GHC_VER \
     BOOTSTRAP_HASKELL_CABAL_VERSION=$CABAL_VER \
-    sh
+    sh && \
+    chmod -R 777 /root
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 

@@ -2,9 +2,6 @@
 
 set -e
 
-echo "UID=$(id -u)"
-echo "GID=$(id -g)"
-
 BUILDER_IMAGE="900253156012.dkr.ecr.us-east-2.amazonaws.com/builder_ghc"
 BUILDER_TAG="8.10.3"
 
@@ -18,11 +15,12 @@ if [ ! -z "${CODEBUILD_BUILD_ID}" ]; then
   docker pull ${BUILDER_IMAGE}:${BUILDER_TAG}
 fi
 
-mkdir -p .cabal
+mkdir -p .cabal dist-newstyle
 
 docker run --rm -t \
   -u $(id -u):$(id -g) \
-  -v $PWD/.cabal:/home/haskell/.cabal \
+  -e HOME=/root \
+  -v $PWD/.cabal:/root/.cabal \
   -v $PWD:/workdir  \
   -w /workdir \
   ${BUILDER_IMAGE}:${BUILDER_TAG} \
@@ -30,7 +28,8 @@ docker run --rm -t \
 
 docker run --rm -t \
   -u $(id -u):$(id -g) \
-  -v $PWD/.cabal:/home/haskell/.cabal \
+  -e HOME=/root \
+  -v $PWD/.cabal:/root/.cabal \
   -v $PWD:/workdir  \
   -w /workdir \
   ${BUILDER_IMAGE}:${BUILDER_TAG} \
@@ -38,7 +37,8 @@ docker run --rm -t \
 
 docker run --rm -t \
   -u $(id -u):$(id -g) \
-  -v $PWD/.cabal:/home/haskell/.cabal \
+  -e HOME=/root \
+  -v $PWD/.cabal:/root/.cabal \
   -v $PWD:/workdir  \
   -w /workdir \
   ${BUILDER_IMAGE}:${BUILDER_TAG} \
@@ -59,3 +59,4 @@ docker build \
 if [ ! -z "${CODEBUILD_BUILD_ID}" ]; then
   docker push $IMAGE_NAME:latest
 fi
+
