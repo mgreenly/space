@@ -15,7 +15,7 @@ fi
 
 mkdir -p .cabal
 
-docker run --rm -i -t \
+docker run --rm -t \
   -u $(id -u):$(id -g) \
   -v $PWD/.cabal:/home/haskell/.cabal \
   -v $PWD:/workdir  \
@@ -23,7 +23,7 @@ docker run --rm -i -t \
   ${BUILDER_IMAGE}:${BUILDER_TAG} \
   cabal update
 
-docker run --rm -i -t \
+docker run --rm -t \
   -u $(id -u):$(id -g) \
   -v $PWD/.cabal:/home/haskell/.cabal \
   -v $PWD:/workdir  \
@@ -31,7 +31,7 @@ docker run --rm -i -t \
   ${BUILDER_IMAGE}:${BUILDER_TAG} \
   cabal configure
 
-docker run --rm -i -t \
+docker run --rm -t \
   -u $(id -u):$(id -g) \
   -v $PWD/.cabal:/home/haskell/.cabal \
   -v $PWD:/workdir  \
