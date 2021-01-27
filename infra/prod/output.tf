@@ -17,9 +17,9 @@ output "war" {
         repository_id: aws_ecr_repository.baseimage.registry_id,
         repository_url: aws_ecr_repository.baseimage.repository_url
       },
-      ghc_builder: {
-        repository_id: aws_ecr_repository.ghc_builder.registry_id,
-        repository_url: aws_ecr_repository.ghc_builder.repository_url
+      builder_ghc: {
+        repository_id: aws_ecr_repository.builder_ghc.registry_id,
+        repository_url: aws_ecr_repository.builder_ghc.repository_url
       }
     }
   }

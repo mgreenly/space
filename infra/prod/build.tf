@@ -135,14 +135,14 @@ resource "aws_codebuild_project" "baseimage" {
 #
 # BUILDER GHC
 #
-resource "aws_ecr_repository" "ghc_builder" {
-  name = "ghc_builder"
+resource "aws_ecr_repository" "builder_ghc" {
+  name = "builder_ghc"
 }
 
 
 
-resource "aws_codebuild_project" "ghc_builder" {
-  name = "ghc_builder"
+resource "aws_codebuild_project" "builder_ghc" {
+  name = "builder_ghc"
   service_role = aws_iam_role.codebuild.arn
   source_version = "refs/heads/main"
   queued_timeout = 480
@@ -178,7 +178,7 @@ resource "aws_codebuild_project" "ghc_builder" {
 
     environment_variable {
       name  = "IMAGE_NAME"
-      value = aws_ecr_repository.ghc_builder.repository_url
+      value = aws_ecr_repository.builder_ghc.repository_url
     }
 
   }
@@ -195,7 +195,7 @@ resource "aws_codebuild_project" "ghc_builder" {
   }
 
   source {
-      buildspec           = "ghc-builder/buildspec.yml"
+      buildspec           = "builder-ghc/buildspec.yml"
       git_clone_depth     = 1
       insecure_ssl        = false
       location            = aws_codecommit_repository.war.clone_url_http

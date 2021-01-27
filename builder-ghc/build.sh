@@ -7,7 +7,7 @@ if [ -z "${CODEBUILD_BUILD_ID}" ]; then
   # Supply these values for local builds, codebuild projects provide them online
   FROM_IMAGE="900253156012.dkr.ecr.us-east-2.amazonaws.com/baseimage"
   FROM_TAG="latest"
-  IMAGE_NAME=$(cd ../infra/prod && terraform output -json | jq '.war.value.ecr.ghc_builder.repository_url' --raw-output)
+  IMAGE_NAME=$(cd ../infra/prod && terraform output -json | jq '.war.value.ecr.builder_ghc.repository_url' --raw-output)
   echo $(aws --profile=logic-refinery ecr get-login-password --region us-east-2) | docker login -u AWS --password-stdin $IMAGE_NAME
 else
   echo $(aws ecr get-login-password --region us-east-2) | docker login -u AWS --password-stdin $IMAGE_NAME
