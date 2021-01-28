@@ -7,7 +7,7 @@ resource "aws_route53_zone" "war" {
 
 resource "aws_route53_record" "war-ns" {
   zone_id = "ZGF50YPNDYLZK"
-  name    = "war.logic-refinery.io"
+  name    = var.domain_name
   type    = "NS"
   ttl     = "60"
   records = aws_route53_zone.war.name_servers
@@ -17,8 +17,8 @@ resource "aws_route53_record" "war-ns" {
 # create acm cert
 #
 resource "aws_acm_certificate" "default" {
-  domain_name               = "war.logic-refinery.io"
-  subject_alternative_names = ["*.war.logic-refinery.io"]
+  domain_name               = var.domain_name
+  subject_alternative_names = ["*.${var.domain_name}"]
   validation_method = "DNS"
 }
 
