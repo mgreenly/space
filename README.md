@@ -1,12 +1,8 @@
-# war
+# space
 
-A poorly choosen name that will change in the near future.
+TLDR...
 
-## TLDR
-
-This is a hobby software project that combines a bunch of the things I enjoy into one thing.
-
-More to come later...
+This is a hobby software project that combines a bunch of the things I wanted to play with.
 
 ### backend
 
