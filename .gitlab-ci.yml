@@ -1,9 +1,0 @@
-default:
-  image: debian:10-slim
-  before_script:
-    - apt-get update
-    - apt-get install rubygems ruby-dev -y
-
-test:
-  script:
-    - ruby --version
