@@ -20,7 +20,7 @@ data "aws_s3_bucket" "terraform" {
 }
 
 # data "aws_dynamodb_table" "terraform" {
-#   name  = "war.logic-refinery.io"
+#   name  = "space.logic-refinery.io"
 # }
 
 #
@@ -30,9 +30,9 @@ terraform {
   backend "s3" {
     profile        = "logic-refinery"
     bucket         = "terraform.logic-refinery.io"
-    key            = "state/war/test"
+    key            = "state/space/test"
     region         = "us-east-2"
-    dynamodb_table = "test.terraform.war.logic-refinery.io"
+    dynamodb_table = "test.terraform.space.logic-refinery.io"
     encrypt        = true
   }
 }

@@ -1,4 +1,4 @@
-output "war" {
+output "space" {
   value = {
     agent1: {
       public_ip: aws_instance.agent1.public_ip,

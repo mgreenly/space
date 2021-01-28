@@ -59,9 +59,9 @@ resource "aws_iam_role_policy_attachment" "code_commit_power_user_for_codebuild"
 #
 # The Repsoitory
 #
-resource "aws_codecommit_repository" "war" {
-  repository_name = "war"
-  description     = "This is the mono repo holding the entire war app."
+resource "aws_codecommit_repository" "space" {
+  repository_name = "space"
+  description     = "This is the mono repo holding the entire space app."
 }
 
 #
@@ -112,7 +112,7 @@ resource "aws_codebuild_project" "baseimage" {
       buildspec           = "baseimage/buildspec.yml"
       git_clone_depth     = 1
       insecure_ssl        = false
-      location            = aws_codecommit_repository.war.clone_url_http
+      location            = aws_codecommit_repository.space.clone_url_http
       report_build_status = false
       type                = "CODECOMMIT"
 
@@ -177,7 +177,7 @@ resource "aws_codebuild_project" "builder_ghc" {
       buildspec           = "builder-ghc/buildspec.yml"
       git_clone_depth     = 1
       insecure_ssl        = false
-      location            = aws_codecommit_repository.war.clone_url_http
+      location            = aws_codecommit_repository.space.clone_url_http
       report_build_status = false
       type                = "CODECOMMIT"
 
@@ -241,7 +241,7 @@ resource "aws_codebuild_project" "backend" {
       buildspec           = "backend/buildspec.yml"
       git_clone_depth     = 1
       insecure_ssl        = false
-      location            = aws_codecommit_repository.war.clone_url_http
+      location            = aws_codecommit_repository.space.clone_url_http
       report_build_status = false
       type                = "CODECOMMIT"
 

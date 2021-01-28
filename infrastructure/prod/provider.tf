@@ -21,9 +21,9 @@ terraform {
   backend "s3" {
     profile        = "logic-refinery"
     bucket         = "terraform.logic-refinery.io"
-    key            = "state/war/prod"
+    key            = "state/space/prod"
     region         = "us-east-2"
-    dynamodb_table = "prod.terraform.war.logic-refinery.io"
+    dynamodb_table = "prod.terraform.space.logic-refinery.io"
     encrypt        = true
   }
 }

@@ -1,8 +1,8 @@
-output "war" {
+output "space" {
   value = {
      git: {
-       clone_url_ssh: aws_codecommit_repository.war.clone_url_ssh,
-       clone_url_http: aws_codecommit_repository.war.clone_url_http,
+       clone_url_ssh: aws_codecommit_repository.space.clone_url_ssh,
+       clone_url_http: aws_codecommit_repository.space.clone_url_http,
      },
      ecr: {
        baseimage: {

@@ -1,3 +1,3 @@
 variable "domain_name" {
-  default = "test.war.logic-refinery.io"
+  default = "test.space.logic-refinery.io"
 }
